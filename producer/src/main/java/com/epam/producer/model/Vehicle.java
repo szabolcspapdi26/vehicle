@@ -15,5 +15,5 @@ import lombok.ToString;
 @ToString
 public class Vehicle {
     private Long id;
-    private Coordinates coordinates;
+    private Coordinate coordinate;
 }

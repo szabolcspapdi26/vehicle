@@ -1,6 +1,6 @@
 package com.epam.producer.kafka;
 
-import com.epam.producer.model.Coordinates;
+import com.epam.producer.model.Coordinate;
 import com.epam.producer.model.Vehicle;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -15,9 +15,9 @@ public class KafkaProducer {
     @Setter
     private String topic;
 
-    private final KafkaTemplate<Long, Coordinates> kafkaTemplate;
+    private final KafkaTemplate<Long, Coordinate> kafkaTemplate;
 
     public void sendVehicle(Vehicle vehicle) {
-        kafkaTemplate.send(topic, vehicle.getId(), vehicle.getCoordinates());
+        kafkaTemplate.send(topic, vehicle.getId(), vehicle.getCoordinate());
     }
 }

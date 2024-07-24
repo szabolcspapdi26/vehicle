@@ -7,10 +7,11 @@ import com.epam.producer.controller.validator.VehicleValidator;
 import com.epam.producer.exception.VehicleCoordinatesXOrYMissingException;
 import com.epam.producer.exception.VehicleIdIsBelowZeroException;
 import com.epam.producer.exception.VehicleIdMissingException;
-import com.epam.producer.model.Coordinates;
+import com.epam.producer.model.Coordinate;
 import com.epam.producer.model.Vehicle;
 import com.epam.producer.service.VehicleService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,20 +29,25 @@ class VehicleControllerTest {
     private VehicleValidator vehicleValidator;
     @InjectMocks
     private VehicleController vehicleController;
+    private Vehicle vehicle;
+    private Coordinate coordinate;
 
-    @Test
-    void createVehicleData_validVehicleDataProvided_createdResponseReturned() {
-        // GIVEN
-        Coordinates coordinates = Coordinates.builder()
+    @BeforeEach
+    void setup() {
+        coordinate = Coordinate.builder()
             .x(12.2)
             .y(12.2)
             .build();
 
-        Vehicle vehicle = Vehicle.builder()
+        vehicle = Vehicle.builder()
             .id(1L)
-            .coordinates(coordinates)
+            .coordinate(coordinate)
             .build();
+    }
 
+    @Test
+    void createVehicleData_validVehicleDataProvided_createdResponseReturned() {
+        // GIVEN
         var expected = ResponseEntity.status(HttpStatus.CREATED).build();
 
         // WHEN
@@ -56,15 +62,7 @@ class VehicleControllerTest {
     @Test
     void createVehicleData_missingVehicleId_vehicleIdMissingExceptionThrown() {
         // GIVEN
-        Coordinates coordinates = Coordinates.builder()
-            .x(12.2)
-            .y(12.2)
-            .build();
-
-        Vehicle vehicle = Vehicle.builder()
-            .id(null)
-            .coordinates(coordinates)
-            .build();
+        vehicle.setId(null);
 
         Mockito.doThrow(VehicleIdMissingException.class)
             .when(vehicleValidator).validateVehicle(vehicle);
@@ -79,15 +77,8 @@ class VehicleControllerTest {
     @Test
     void createVehicleData_missingXCoordinates_vehicleCoordinatesXOrYMissingExceptionThrown() {
         // GIVEN
-        Coordinates coordinates = Coordinates.builder()
-            .x(null)
-            .y(12.2)
-            .build();
-
-        Vehicle vehicle = Vehicle.builder()
-            .id(1L)
-            .coordinates(coordinates)
-            .build();
+        coordinate.setX(null);
+        vehicle.setCoordinate(coordinate);
 
         Mockito.doThrow(VehicleCoordinatesXOrYMissingException.class)
             .when(vehicleValidator).validateVehicle(vehicle);
@@ -102,15 +93,8 @@ class VehicleControllerTest {
     @Test
     void createVehicleData_missingYCoordinates_vehicleCoordinatesXOrYMissingExceptionThrown() {
         // GIVEN
-        Coordinates coordinates = Coordinates.builder()
-            .x(12.2)
-            .y(null)
-            .build();
-
-        Vehicle vehicle = Vehicle.builder()
-            .id(1L)
-            .coordinates(coordinates)
-            .build();
+        coordinate.setY(null);
+        vehicle.setCoordinate(coordinate);
 
         Mockito.doThrow(VehicleCoordinatesXOrYMissingException.class)
             .when(vehicleValidator).validateVehicle(vehicle);
@@ -125,15 +109,7 @@ class VehicleControllerTest {
     @Test
     void createVehicleData_vehicleIdIsBelowZero_vehicleIdIsBelowZeroExceptionThrown() {
         // GIVEN
-        Coordinates coordinates = Coordinates.builder()
-            .x(12.2)
-            .y(12.2)
-            .build();
-
-        Vehicle vehicle = Vehicle.builder()
-            .id(-1L)
-            .coordinates(coordinates)
-            .build();
+        vehicle.setId(-1L);
 
         Mockito.doThrow(VehicleIdIsBelowZeroException.class)
             .when(vehicleValidator).validateVehicle(vehicle);

@@ -1,11 +1,11 @@
 spring:
+  application:
+    name: producer
   kafka:
     producer:
       bootstrap-servers: https://localhost:29092
       key-serializer: org.apache.kafka.common.serialization.LongSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-  application:
-    name: producer
 
 server:
   port: 8090

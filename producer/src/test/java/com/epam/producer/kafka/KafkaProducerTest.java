@@ -1,6 +1,6 @@
 package com.epam.producer.kafka;
 
-import com.epam.producer.model.Coordinates;
+import com.epam.producer.model.Coordinate;
 import com.epam.producer.model.Vehicle;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,21 +13,21 @@ import org.springframework.kafka.core.KafkaTemplate;
 @ExtendWith(MockitoExtension.class)
 class KafkaProducerTest {
     @Mock
-    private KafkaTemplate<Long, Coordinates> kafkaTemplate;
+    private KafkaTemplate<Long, Coordinate> kafkaTemplate;
     @InjectMocks
     private KafkaProducer kafkaProducer;
 
     @Test
     void sendVehicle_validVehicleGiven_kafkaTemplateSendMethodCalled() {
         // GIVEN
-        Coordinates coordinates = Coordinates.builder()
+        Coordinate coordinates = Coordinate.builder()
             .x(12.2)
             .y(12.2)
             .build();
 
         Vehicle vehicle = Vehicle.builder()
             .id(1L)
-            .coordinates(coordinates)
+            .coordinate(coordinates)
             .build();
 
         String topic = "input";
@@ -38,6 +38,6 @@ class KafkaProducerTest {
         kafkaProducer.sendVehicle(vehicle);
 
         // THEN
-        Mockito.verify(kafkaTemplate).send(topic, vehicle.getId(), vehicle.getCoordinates());
+        Mockito.verify(kafkaTemplate).send(topic, vehicle.getId(), vehicle.getCoordinate());
     }
 }

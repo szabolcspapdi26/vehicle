@@ -9,10 +9,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class VehicleValidatorImpl implements VehicleValidator {
 
+    @Override
     public void validateVehicle(Vehicle vehicle) {
         if(vehicle.getId() == null) {
             throw new VehicleIdMissingException("Missing vehicle id!");
-        } else if(vehicle.getCoordinates().getX() == null || vehicle.getCoordinates().getY() == null) {
+        } else if(vehicle.getCoordinate().getX() == null || vehicle.getCoordinate().getY() == null) {
             throw new VehicleCoordinatesXOrYMissingException("X or Y coordinates missing!");
         } else if(vehicle.getId() < 0L) {
             throw new VehicleIdIsBelowZeroException("Vehicle id cannot be less than zero!");

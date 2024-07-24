@@ -13,7 +13,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode
 @ToString
-public class Coordinates {
+public class Coordinate {
     private Double x;
     private Double y;
 }
