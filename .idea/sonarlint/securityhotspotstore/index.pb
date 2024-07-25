@@ -74,10 +74,6 @@ r
 Bconsumer/src/main/java/com/epam/consumer/aspect/LoggingAspect.java,a\6\a6c7dcdca8b0efbd87e776cc8eeb8079884e72bd
 Å
 Qconsumer/src/test/java/com/epam/consumer/integration/ConsumerIntegrationTest.java,2\7\27ee165c939c86b183c732325522005ad14ce08d
-8
-start.sh,9\d\9dcf658ee8180c343527e6fa4612975d22036004
-7
-stop.sh,4\8\48c9cde6a7a47ea71c3cdcbd21c46793a455834a
 =
 stop-kafka.sh,f\0\f00aedd78a816f9d32f5c583959f37f571314c89
 \

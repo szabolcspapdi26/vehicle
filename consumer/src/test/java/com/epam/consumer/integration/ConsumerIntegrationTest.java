@@ -2,6 +2,8 @@ package com.epam.consumer.integration;
 
 
 import com.epam.consumer.model.Coordinate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -34,7 +36,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
-@EmbeddedKafka
+@EmbeddedKafka(partitions = 1)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class ConsumerIntegrationTest {
     @Autowired
@@ -77,6 +79,7 @@ class ConsumerIntegrationTest {
             .build();
 
         String expected = "0.0";
+        embeddedKafkaBroker.getTopics();
 
         // WHEN
         kafkaTemplate.send(inputTopic, id, coordinate);
@@ -112,16 +115,18 @@ class ConsumerIntegrationTest {
         kafkaTemplate.send(inputTopic, id, coordinate2);
 
         // THEN
-        ConsumerRecords<Long, String> records = KafkaTestUtils.getRecords(consumer);
-        Assertions.assertEquals(2, records.count());
-
-        ConsumerRecord<Long, String> record = null;
-        for (ConsumerRecord<Long, String> consumerRecord : records) {
-            record = consumerRecord;
+        List<ConsumerRecord<Long, String>> allRecords = new ArrayList<>();
+        long startTime = System.currentTimeMillis();
+        while (allRecords.size() < 2 && System.currentTimeMillis() - startTime < 2000) {
+            ConsumerRecords<Long, String> records = KafkaTestUtils.getRecords(consumer);
+            records.iterator().forEachRemaining(allRecords::add);
         }
 
-        Assertions.assertEquals(id, record.key());
-        Assertions.assertEquals(expected, record.value());
+        Assertions.assertEquals(2, allRecords.size());
+
+        ConsumerRecord<Long, String> lastRecord = allRecords.get(allRecords.size() - 1);
+        Assertions.assertEquals(id, lastRecord.key());
+        Assertions.assertEquals(expected, lastRecord.value());
     }
 
     private Consumer<Long, String> createConsumer() {
@@ -130,6 +135,7 @@ class ConsumerIntegrationTest {
         consumerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class);
         consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+
         Consumer<Long, String> consumer = new DefaultKafkaConsumerFactory<Long, String>(consumerProps)
             .createConsumer();
         embeddedKafkaBroker.consumeFromAnEmbeddedTopic(consumer, outputTopic);
