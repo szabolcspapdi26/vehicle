@@ -2,8 +2,8 @@ package com.epam.consumer.config;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,24 +18,29 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 @Configuration
 @EnableKafka
 @Profile({"default", "test"})
-public class ConsumerConfig {
-    @Autowired
-    private KafkaProperties kafkaProperties;
-
+public class ConsumerConfiguration {
+    //@Autowired
+    private final KafkaProperties kafkaProperties;
     @Value("${input-coordinate-data-format}")
     private String dataFormat;
+
+    public ConsumerConfiguration(KafkaProperties kafkaProperties) {
+        this.kafkaProperties = kafkaProperties;
+    }
 
     @Bean
     public ConsumerFactory<Long, Object> consumerFactory() {
         final JsonDeserializer<Object> jsonDeserializer = new JsonDeserializer<>();
         Map<String,Object> config = new HashMap<>();
         config.put(JsonDeserializer.TRUSTED_PACKAGES, dataFormat);
-        config.put(JsonDeserializer.USE_TYPE_INFO_HEADERS,false);
+        config.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
         config.put(JsonDeserializer.VALUE_DEFAULT_TYPE,"com.epam.consumer.model.Coordinate");
-        jsonDeserializer.configure(config,false);
-        return new DefaultKafkaConsumerFactory<>(
-            kafkaProperties.buildConsumerProperties(null),
-            new LongDeserializer(), jsonDeserializer);
+        jsonDeserializer.configure(config, false);
+
+        Map<String, Object> props = kafkaProperties.buildConsumerProperties(null);
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+
+        return new DefaultKafkaConsumerFactory<>(props, new LongDeserializer(), jsonDeserializer);
     }
 
     @Bean

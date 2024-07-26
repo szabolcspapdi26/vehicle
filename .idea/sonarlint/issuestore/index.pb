@@ -80,3 +80,5 @@ Qconsumer/src/test/java/com/epam/consumer/integration/ConsumerIntegrationTest.ja
 ,.idea/inspectionProfiles/Project_Default.xml,4\9\496a238a6afa168dbaf6efd37bb459331589579c
 >
 start-kafka.sh,5\d\5dc563de4b65ff8c096fbf3e9918e90d881e80b2
+z
+Jconsumer/src/main/java/com/epam/consumer/config/ConsumerConfiguration.java,a\a\aabcf7446734083acef1613ea1624bb53f91e600
