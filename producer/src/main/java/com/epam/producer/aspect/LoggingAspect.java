@@ -14,8 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LoggingAspect {
 
-    @Pointcut("within(com.epam.producer.controller..*) ||"
-        + "within(com.epam.producer.service..*) ||"
+    @Pointcut("within(com.epam.producer.service..*) ||"
         + "within(com.epam.producer.kafka..*)")
     public void pointcut() {}
 

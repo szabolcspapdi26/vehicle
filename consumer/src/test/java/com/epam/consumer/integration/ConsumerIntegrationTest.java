@@ -5,23 +5,18 @@ import com.epam.consumer.model.Coordinate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
+import java.util.concurrent.TimeUnit;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.LongSerializer;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.junit.jupiter.api.AfterEach;
+import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
@@ -42,29 +37,14 @@ class ConsumerIntegrationTest {
     @Autowired
     private EmbeddedKafkaBroker embeddedKafkaBroker;
     private KafkaTemplate<Long, Coordinate> kafkaTemplate;
-    private Consumer<Long, String> consumer;
-    @Value("${input-topic}")
-    private String inputTopic;
-    @Value("${output-topic}")
-    private String outputTopic;
+    private List<String> vehicleData;
 
     @BeforeEach
     void setup() {
-        if(!embeddedKafkaBroker.getTopics().contains(outputTopic)) {
-            embeddedKafkaBroker.addTopics(outputTopic);
-        }
+        vehicleData = new ArrayList<>();
+
         if(kafkaTemplate == null) {
             kafkaTemplate = createProducer();
-        }
-        if(consumer == null) {
-            consumer = createConsumer();
-        }
-    }
-
-    @AfterEach
-    void tearDown() {
-        if(consumer != null) {
-            consumer.close();
         }
     }
 
@@ -79,18 +59,16 @@ class ConsumerIntegrationTest {
             .build();
 
         String expected = "0.0";
-        embeddedKafkaBroker.getTopics();
 
         // WHEN
-        kafkaTemplate.send(inputTopic, id, coordinate);
+        kafkaTemplate.send("input", id, coordinate);
 
         // THEN
-        ConsumerRecords<Long, String> records = KafkaTestUtils.getRecords(consumer);
-        ConsumerRecord<Long, String> record = records.iterator().next();
 
-        Assertions.assertEquals(1, records.count());
-        Assertions.assertEquals(id, record.key());
-        Assertions.assertEquals(expected, record.value());
+        Awaitility.await().atMost(2, TimeUnit.SECONDS).untilAsserted(() -> {
+            Assertions.assertEquals(1, vehicleData.size());
+            Assertions.assertEquals(expected, vehicleData.get(0));
+        });
     }
 
     @Test
@@ -111,36 +89,23 @@ class ConsumerIntegrationTest {
         String expected = "10.0";
 
         // WHEN
-        kafkaTemplate.send(inputTopic, id, coordinate1);
-        kafkaTemplate.send(inputTopic, id, coordinate2);
+        kafkaTemplate.send("input", id, coordinate1);
+        kafkaTemplate.send("input", id, coordinate2);
 
         // THEN
-        List<ConsumerRecord<Long, String>> allRecords = new ArrayList<>();
-        long startTime = System.currentTimeMillis();
-        while (allRecords.size() < 2 && System.currentTimeMillis() - startTime < 2000) {
-            ConsumerRecords<Long, String> records = KafkaTestUtils.getRecords(consumer);
-            records.iterator().forEachRemaining(allRecords::add);
-        }
-
-        Assertions.assertEquals(2, allRecords.size());
-
-        ConsumerRecord<Long, String> lastRecord = allRecords.get(allRecords.size() - 1);
-        Assertions.assertEquals(id, lastRecord.key());
-        Assertions.assertEquals(expected, lastRecord.value());
+        Awaitility.await().atMost(2, TimeUnit.SECONDS).untilAsserted(() -> {
+            Assertions.assertEquals(2, vehicleData.size());
+            Assertions.assertEquals(expected, vehicleData.get(1));
+        });
     }
 
-    private Consumer<Long, String> createConsumer() {
-        Map<String, Object> consumerProps = KafkaTestUtils.consumerProps("testGroup",
-            "true", embeddedKafkaBroker);
-        consumerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class);
-        consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+    @KafkaListener(topics = "output", groupId = "test-consumer",
+        properties = {"bootstrap-servers:${spring.embedded.kafka.brokers}",
+        "key.deserializer:org.apache.kafka.common.serialization.LongDeserializer",
+        "value.deserializer:org.apache.kafka.common.serialization.StringDeserializer"})
+    private void consume(ConsumerRecord<Long, String> record) {
 
-        Consumer<Long, String> consumer = new DefaultKafkaConsumerFactory<Long, String>(consumerProps)
-            .createConsumer();
-        embeddedKafkaBroker.consumeFromAnEmbeddedTopic(consumer, outputTopic);
-
-        return consumer;
+        vehicleData.add(record.value());
     }
 
     private KafkaTemplate<Long, Coordinate> createProducer() {

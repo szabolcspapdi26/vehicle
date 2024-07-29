@@ -1,19 +1,6 @@
 package com.epam.producer.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@Data
-@EqualsAndHashCode
-@ToString
-public class Vehicle {
-    private Long id;
-    private Coordinate coordinate;
-}
+public record Vehicle (long id, Coordinate coordinate) { }

@@ -20,14 +20,14 @@ class VehicleServiceImplTest {
     @Test
     void processVehicle_validVehicleReceived_kafkaProducerCalled() {
         // GIVEN
-        Coordinate coordinates = Coordinate.builder()
+        Coordinate coordinate = Coordinate.builder()
             .x(12.2)
             .y(12.2)
             .build();
 
         Vehicle vehicle = Vehicle.builder()
             .id(1L)
-            .coordinate(coordinates)
+            .coordinate(coordinate)
             .build();
 
         // WHEN

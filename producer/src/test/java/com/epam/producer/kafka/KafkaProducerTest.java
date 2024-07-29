@@ -20,24 +20,16 @@ class KafkaProducerTest {
     @Test
     void sendVehicle_validVehicleGiven_kafkaTemplateSendMethodCalled() {
         // GIVEN
-        Coordinate coordinates = Coordinate.builder()
-            .x(12.2)
-            .y(12.2)
-            .build();
+        Coordinate coordinate = new Coordinate(12.2, 12.2);
 
-        Vehicle vehicle = Vehicle.builder()
-            .id(1L)
-            .coordinate(coordinates)
-            .build();
+        Vehicle vehicle = new Vehicle(1L, coordinate);
 
         String topic = "input";
-
-        kafkaProducer.setTopic(topic);
 
         // WHEN
         kafkaProducer.sendVehicle(vehicle);
 
         // THEN
-        Mockito.verify(kafkaTemplate).send(topic, vehicle.getId(), vehicle.getCoordinate());
+        Mockito.verify(kafkaTemplate).send(topic, vehicle.id(), vehicle.coordinate());
     }
 }

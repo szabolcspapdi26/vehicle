@@ -7,19 +7,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ProcessVehicleImpl implements ProcessVehicle {
     @Setter
-    private Map<Long, List<Coordinate>> vehicleData;
+    private Map<Long, List<Coordinate>> vehicleData = new HashMap<>();
     private final Producer producer;
-
-    public ProcessVehicleImpl(Producer producer) {
-        this.producer = producer;
-        vehicleData = new HashMap<>();
-    }
 
     @Override
     public void processVehicleData(Long id, Coordinate coordinate) {
@@ -65,8 +62,8 @@ public class ProcessVehicleImpl implements ProcessVehicle {
 
     double calculateTraveledDistanceFromCoordinates(Coordinate previous, Coordinate actual) {
 
-        return Math.sqrt(Math.pow((actual.getX() - previous.getX()), 2) +
-            Math.pow((actual.getY() - previous.getY()), 2));
+        return Math.sqrt(Math.pow((actual.x() - previous.x()), 2) +
+            Math.pow((actual.y() - previous.y()), 2));
     }
 
     public Map<Long, List<Coordinate>> getVehicleData() {

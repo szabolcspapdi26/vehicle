@@ -23,7 +23,6 @@ class ProducerTest {
         Double traveledDistance = 10.0;
 
         String topic = "output";
-        producer.setTopic(topic);
 
         // WHEN
         producer.send(id, traveledDistance);

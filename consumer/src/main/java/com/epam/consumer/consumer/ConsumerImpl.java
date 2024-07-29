@@ -13,7 +13,7 @@ public class ConsumerImpl implements Consumer {
     private final ProcessVehicle processVehicle;
 
     @Override
-    @KafkaListener(topics = "${input-topic}", groupId = "vehicle-consumer-group")
+    @KafkaListener(topics = "input", groupId = "vehicle-consumer-group")
     public void consume(ConsumerRecord<Long, Coordinate> vehicle) {
         processVehicle.processVehicleData(vehicle.key(), vehicle.value());
     }
