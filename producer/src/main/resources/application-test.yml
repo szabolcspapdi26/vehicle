@@ -8,8 +8,6 @@ spring:
       bootstrap-servers: ${spring.embedded.kafka.brokers}
       key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
       properties:
-        spring:
-          json:
-            trusted:
-              packages: '*'
+        spring.json.trusted.packages: '*'

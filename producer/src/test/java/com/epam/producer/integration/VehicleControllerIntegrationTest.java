@@ -24,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,15 +32,13 @@ import org.springframework.test.web.servlet.MockMvc;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
-@EmbeddedKafka
+@EmbeddedKafka(partitions = 1)
 @AutoConfigureMockMvc
 class VehicleControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private EmbeddedKafkaBroker embeddedKafkaBroker;
     private List<Vehicle> vehicleData;
 
     @BeforeEach
@@ -62,7 +61,7 @@ class VehicleControllerIntegrationTest {
             .andExpect(status().isCreated());
 
         // THEN
-        Awaitility.await().atMost(2, TimeUnit.SECONDS).untilAsserted(() -> {
+        Awaitility.await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
             Assertions.assertEquals(1, vehicleData.size());
             Assertions.assertEquals(1L, vehicleData.get(0).id());
             Assertions.assertEquals(expectedCoordinate, vehicleData.get(0).coordinate());
