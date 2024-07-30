@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class VehicleController {
     private final VehicleService vehicleService;
     private final VehicleMapper vehicleMapper;
-    // jsonschema schemaregistry
-    // schemaregistry to this app
-    // kafka streams
 
     @PostMapping(path = "/vehicle")
     public ResponseEntity<Void> createVehicleData(@RequestBody @Valid VehicleDto vehicleDto) {

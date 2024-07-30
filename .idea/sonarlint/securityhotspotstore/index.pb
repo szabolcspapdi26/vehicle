@@ -72,3 +72,5 @@ u
 Eproducer/src/main/java/com/epam/producer/mapper/CoordinateMapper.java,0\a\0afb765420e034409eea8c35770bb0b8fba252d8
 o
 ?producer/src/main/java/com/epam/producer/dto/CoordinateDto.java,c\2\c23a9b4a2c17f454307193ad65efe6b6c4f51316
+o
+?producer/src/main/java/com/epam/producer/mapper/MainMapper.java,9\9\99e5b1bb8174ff2d6452b9a5315badfba6137b51

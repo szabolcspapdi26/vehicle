@@ -11,5 +11,5 @@ public record VehicleDto(
     @Min(value = 0, message = "id cannot be less than 0")
     Long id,
     @Valid
-    CoordinateDto coordinateDto) {
+    CoordinateDto coordinate) {
 }

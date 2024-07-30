@@ -3,4 +3,4 @@ package com.epam.producer.model;
 import lombok.Builder;
 
 @Builder
-public record Vehicle (long id, Coordinate coordinate) { }
+public record Vehicle (Long id, Coordinate coordinate) { }

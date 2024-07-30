@@ -134,10 +134,7 @@ class VehicleControllerIntegrationTest {
 
     @KafkaListener(topics = "input", groupId = "test-group")
     public void consume(ConsumerRecord<Long, Coordinate> record) {
-        Vehicle vehicle = Vehicle.builder()
-            .id(record.key())
-            .coordinate(record.value())
-            .build();
+        Vehicle vehicle = new Vehicle(record.key(), record.value());
 
         vehicleData.add(vehicle);
     }

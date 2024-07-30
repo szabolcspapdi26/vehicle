@@ -1,12 +1,14 @@
 package com.epam.producer.mapper;
 
+import com.epam.producer.dto.CoordinateDto;
 import com.epam.producer.dto.VehicleDto;
+import com.epam.producer.model.Coordinate;
 import com.epam.producer.model.Vehicle;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {CoordinateMapper.class})
+
+@Mapper(componentModel = "spring")
 public interface VehicleMapper {
-    @Mapping(source = "vehicleDto.coordinateDto", target = "coordinate")
     Vehicle toVehicle(VehicleDto vehicleDto);
+    Coordinate toCoordinate(CoordinateDto coordinateDto);
 }
