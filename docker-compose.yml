@@ -32,4 +32,17 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: vehicle-cluster
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
       DYNAMIC_CONFIG_ENABLED: 'true'
+
+  schema-registry:
+    container_name: schema-registry
+    image: confluentinc/cp-schema-registry:7.4.4
+    ports:
+      - 8081:8081
+    depends_on:
+      - kafka
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
+
