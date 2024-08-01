@@ -1,7 +1,7 @@
 package com.epam.consumer.integration;
 
-
-import com.epam.consumer.model.Coordinate;
+import com.epam.schema.Coordinate;
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +15,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
@@ -38,6 +38,8 @@ class ConsumerIntegrationTest {
     private EmbeddedKafkaBroker embeddedKafkaBroker;
     private KafkaTemplate<Long, Coordinate> kafkaTemplate;
     private List<String> vehicleData;
+    @Value("${spring.kafka.properties.schema.registry.url}")
+    private String schemaRegistryUrl;
 
     @BeforeEach
     void setup() {
@@ -53,9 +55,9 @@ class ConsumerIntegrationTest {
         // GIVEN
         Long id = 1L;
 
-        Coordinate coordinate = Coordinate.builder()
-            .x(12.2)
-            .y(12.2)
+        Coordinate coordinate = Coordinate.newBuilder()
+            .setX(12.2)
+            .setY(12.2)
             .build();
 
         String expected = "0.0";
@@ -76,14 +78,14 @@ class ConsumerIntegrationTest {
         // GIVEN
         Long id = 1L;
 
-        Coordinate coordinate1 = Coordinate.builder()
-            .x(12.2)
-            .y(12.2)
+        Coordinate coordinate1 = Coordinate.newBuilder()
+            .setX(12.2)
+            .setY(12.2)
             .build();
 
-        Coordinate coordinate2 = Coordinate.builder()
-            .x(22.2)
-            .y(12.2)
+        Coordinate coordinate2 = Coordinate.newBuilder()
+            .setX(22.2)
+            .setY(12.2)
             .build();
 
         String expected = "10.0";
@@ -111,7 +113,8 @@ class ConsumerIntegrationTest {
     private KafkaTemplate<Long, Coordinate> createProducer() {
         Map<String, Object> producerProps = KafkaTestUtils.producerProps(embeddedKafkaBroker);
         producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class);
-        producerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        producerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+        producerProps.put("schema.registry.url", schemaRegistryUrl);
         ProducerFactory<Long, Coordinate> producerFactory = new DefaultKafkaProducerFactory<>(producerProps);
 
         return new KafkaTemplate<>(producerFactory);

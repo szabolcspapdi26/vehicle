@@ -1,6 +1,6 @@
 package com.epam.consumer.processing;
 
-import com.epam.consumer.model.Coordinate;
+import com.epam.consumer.model.CoordinateModel;
 import com.epam.consumer.producer.Producer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,13 +22,13 @@ class ProcessVehicleImplTest {
     @InjectMocks
     private ProcessVehicleImpl processVehicle;
     private Long id;
-    private Coordinate coordinate;
+    private CoordinateModel coordinateModel;
 
     @BeforeEach
     void setup() {
         id = 1L;
 
-        coordinate = Coordinate.builder()
+        coordinateModel = CoordinateModel.builder()
             .x(12.2)
             .y(12.2)
             .build();
@@ -40,7 +40,7 @@ class ProcessVehicleImplTest {
         double expected = 0.0;
 
         // WHEN
-        processVehicle.processVehicleData(id, coordinate);
+        processVehicle.processVehicleData(id, coordinateModel);
 
         // THEN
         Mockito.verify(producer).send(id, expected);
@@ -52,7 +52,7 @@ class ProcessVehicleImplTest {
         double expected = 0.0;
 
         // WHEN
-        var actual = processVehicle.getTraveledDistance(id, coordinate);
+        var actual = processVehicle.getTraveledDistance(id, coordinateModel);
 
         // THEN
         Assertions.assertEquals(expected, actual);
@@ -61,15 +61,15 @@ class ProcessVehicleImplTest {
     @Test
     void getTraveledDistance_moreThanOneCoordinateForVehicleId_TraveledDistanceReturned() {
         // GIVEN
-        List<Coordinate> initialCoordinates = new ArrayList<>();
-        initialCoordinates.add(coordinate);
+        List<CoordinateModel> initialCoordinateModels = new ArrayList<>();
+        initialCoordinateModels.add(coordinateModel);
 
-        Map<Long, List<Coordinate>> vehicleData = new HashMap<>();
-        vehicleData.put(id, initialCoordinates);
+        Map<Long, List<CoordinateModel>> vehicleData = new HashMap<>();
+        vehicleData.put(id, initialCoordinateModels);
 
         processVehicle.setVehicleData(vehicleData);
 
-        Coordinate newCoordinate = Coordinate.builder()
+        CoordinateModel newCoordinateModel = CoordinateModel.builder()
             .x(22.2)
             .y(12.2)
             .build();
@@ -77,7 +77,7 @@ class ProcessVehicleImplTest {
         double expected = 10.0;
 
         // WHEN
-        var actual = processVehicle.getTraveledDistance(id, newCoordinate);
+        var actual = processVehicle.getTraveledDistance(id, newCoordinateModel);
 
         // THEN
         Assertions.assertEquals(expected, actual);
@@ -88,69 +88,69 @@ class ProcessVehicleImplTest {
         // GIVEN
         int expectedSize = 1;
 
-        List<Coordinate> expectedCoordinates = new ArrayList<>();
-        expectedCoordinates.add(coordinate);
+        List<CoordinateModel> expectedCoordinateModels = new ArrayList<>();
+        expectedCoordinateModels.add(coordinateModel);
 
         // WHEN
-        processVehicle.updateVehicleCoordinates(id, coordinate);
+        processVehicle.updateVehicleCoordinates(id, coordinateModel);
 
         // THEN
         Assertions.assertEquals(expectedSize, processVehicle.getVehicleData().get(id).size());
-        Assertions.assertEquals(expectedCoordinates, processVehicle.getVehicleData().get(id));
+        Assertions.assertEquals(expectedCoordinateModels, processVehicle.getVehicleData().get(id));
     }
 
     @Test
     void updateVehicleCoordinates_vehicleDataAlreadyExitsInMap_coordinateAddedToVehicleDataMap() {
         // GIVEN
-        List<Coordinate> initialCoordinates = new ArrayList<>();
-        initialCoordinates.add(coordinate);
+        List<CoordinateModel> initialCoordinateModels = new ArrayList<>();
+        initialCoordinateModels.add(coordinateModel);
 
-        Map<Long, List<Coordinate>> vehicleData = new HashMap<>();
+        Map<Long, List<CoordinateModel>> vehicleData = new HashMap<>();
 
-        vehicleData.put(id, initialCoordinates);
+        vehicleData.put(id, initialCoordinateModels);
 
         processVehicle.setVehicleData(vehicleData);
 
-        Coordinate newCoordinate = Coordinate.builder()
+        CoordinateModel newCoordinateModel = CoordinateModel.builder()
             .x(22.2)
             .y(12.2)
             .build();
 
         int expectedSize = 2;
 
-        List<Coordinate> expectedCoordinates = new ArrayList<>();
-        expectedCoordinates.add(coordinate);
-        expectedCoordinates.add(newCoordinate);
+        List<CoordinateModel> expectedCoordinateModels = new ArrayList<>();
+        expectedCoordinateModels.add(coordinateModel);
+        expectedCoordinateModels.add(newCoordinateModel);
 
         // WHEN
-        processVehicle.updateVehicleCoordinates(id, newCoordinate);
+        processVehicle.updateVehicleCoordinates(id, newCoordinateModel);
 
         // THEN
         Assertions.assertEquals(expectedSize, processVehicle.getVehicleData().get(id).size());
-        Assertions.assertEquals(expectedCoordinates, processVehicle.getVehicleData().get(id));
+        Assertions.assertEquals(expectedCoordinateModels, processVehicle.getVehicleData().get(id));
     }
 
     @Test
     void calculateTraveledDistance_coordinateListOfSizeThreeGiven_traveledDistanceReturned() {
         // GIVEN
-        Coordinate coordinate2 = Coordinate.builder()
+        CoordinateModel coordinateModel2 = CoordinateModel.builder()
             .x(22.2)
             .y(12.2)
             .build();
-        Coordinate coordinate3 = Coordinate.builder()
+        CoordinateModel coordinateModel3 = CoordinateModel.builder()
             .x(22.2)
             .y(22.2)
             .build();
 
-        List<Coordinate> coordinates = new ArrayList<>();
-        coordinates.add(coordinate);
-        coordinates.add(coordinate2);
-        coordinates.add(coordinate3);
+        List<CoordinateModel> coordinateModels = new ArrayList<>();
+        coordinateModels.add(coordinateModel);
+        coordinateModels.add(coordinateModel2);
+        coordinateModels.add(coordinateModel3);
 
         double expected = 20.0;
 
         // WHEN
-        var actual = processVehicle.calculateTraveledDistance(coordinates);
+        var actual = processVehicle.calculateTraveledDistance(coordinateModels);
 
         // THEN
         Assertions.assertEquals(expected, actual);
@@ -159,7 +159,7 @@ class ProcessVehicleImplTest {
     @Test
     void calculateTraveledDistanceFromCoordinates_twoCoordinatesGiven_traveledDistanceReturned() {
         // GIVEN
-        Coordinate actualCoordinate = Coordinate.builder()
+        CoordinateModel actualCoordinateModel = CoordinateModel.builder()
             .x(22.2)
             .y(12.2)
             .build();
@@ -167,8 +167,8 @@ class ProcessVehicleImplTest {
         double expected = 10.0;
 
         // WHEN
-        double actual = processVehicle.calculateTraveledDistanceFromCoordinates(coordinate,
-            actualCoordinate);
+        double actual = processVehicle.calculateTraveledDistanceFromCoordinates(coordinateModel,
+            actualCoordinateModel);
 
         // THEN
         Assertions.assertEquals(expected, actual);

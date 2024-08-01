@@ -70,3 +70,7 @@ p
 @producer/src/main/java/com/epam/producer/model/VehicleModel.java,1\d\1db3ac8510b1a5db723282c952036e67c64605d0
 ƒ
 Sproducer/src/test/java/com/epam/producer/controller/VehicleModelControllerTest.java,b\5\b54a047f44cdea14b25ce58a1bc1fb341c6cd5ef
+r
+Bconsumer/src/main/java/com/epam/consumer/mapper/VehicleMapper.java,2\7\27e3e7fefcce71f5a76c9282955d1721a2422f87
+s
+Cconsumer/src/main/java/com/epam/consumer/model/CoordinateModel.java,0\7\0746b5008ff9c7c5faa99e3c2571cd640ecb15f2

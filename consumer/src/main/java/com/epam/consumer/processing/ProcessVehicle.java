@@ -1,7 +1,7 @@
 package com.epam.consumer.processing;
 
-import com.epam.consumer.model.Coordinate;
+import com.epam.consumer.model.CoordinateModel;
 
 public interface ProcessVehicle {
-    void processVehicleData(Long id, Coordinate coordinate);
+    void processVehicleData(Long id, CoordinateModel coordinateModel);
 }

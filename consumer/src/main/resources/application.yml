@@ -2,15 +2,15 @@ spring:
   main:
     web-application-type: none
   kafka:
-    bootstrap-servers: https://localhost:29092
+    bootstrap-servers: http://localhost:29092
+    properties:
+      schema.registry.url: http://localhost:8081
     producer:
       key-serializer: org.apache.kafka.common.serialization.LongSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
       auto-offset-reset: earliest
       properties:
-        spring.json.trusted.packages: '*'
-        spring.json.value.default.type: com.epam.consumer.model.Coordinate
-        spring.json.use.type.headers: false
+        specific.avro.reader: true

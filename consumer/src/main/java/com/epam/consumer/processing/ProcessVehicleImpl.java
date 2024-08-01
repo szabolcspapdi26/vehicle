@@ -1,6 +1,6 @@
 package com.epam.consumer.processing;
 
-import com.epam.consumer.model.Coordinate;
+import com.epam.consumer.model.CoordinateModel;
 import com.epam.consumer.producer.Producer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,58 +15,58 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ProcessVehicleImpl implements ProcessVehicle {
     @Setter
-    private Map<Long, List<Coordinate>> vehicleData = new HashMap<>();
+    private Map<Long, List<CoordinateModel>> vehicleData = new HashMap<>();
     private final Producer producer;
 
     @Override
-    public void processVehicleData(Long id, Coordinate coordinate) {
-        double traveledDistance = getTraveledDistance(id, coordinate);
+    public void processVehicleData(Long id, CoordinateModel coordinateModel) {
+        double traveledDistance = getTraveledDistance(id, coordinateModel);
         producer.send(id, traveledDistance);
     }
 
-    double getTraveledDistance(Long id, Coordinate coordinate) {
-        updateVehicleCoordinates(id, coordinate);
-        List<Coordinate> coordinates = vehicleData.get(id);
+    double getTraveledDistance(Long id, CoordinateModel coordinateModel) {
+        updateVehicleCoordinates(id, coordinateModel);
+        List<CoordinateModel> coordinateModels = vehicleData.get(id);
 
         double traveledDistance = 0.0;
 
-        if(coordinates.size() > 1) {
-            traveledDistance = calculateTraveledDistance(coordinates);
+        if(coordinateModels.size() > 1) {
+            traveledDistance = calculateTraveledDistance(coordinateModels);
         }
 
         return traveledDistance;
     }
 
-    void updateVehicleCoordinates(Long id, Coordinate coordinate) {
-        List<Coordinate> coordinates;
+    void updateVehicleCoordinates(Long id, CoordinateModel coordinateModel) {
+        List<CoordinateModel> coordinateModels;
         if(vehicleData.containsKey(id)) {
-            coordinates = vehicleData.get(id);
+            coordinateModels = vehicleData.get(id);
         } else {
-            coordinates = new ArrayList<>();
+            coordinateModels = new ArrayList<>();
         }
-        coordinates.add(coordinate);
-        vehicleData.put(id, coordinates);
+        coordinateModels.add(coordinateModel);
+        vehicleData.put(id, coordinateModels);
     }
 
-    double calculateTraveledDistance(List<Coordinate> coordinates) {
+    double calculateTraveledDistance(List<CoordinateModel> coordinateModels) {
         double traveledDistance = 0.0;
 
-        for (int i = 1; i < coordinates.size(); i++) {
-            Coordinate previous = coordinates.get(i - 1);
-            Coordinate actual = coordinates.get(i);
+        for (int i = 1; i < coordinateModels.size(); i++) {
+            CoordinateModel previous = coordinateModels.get(i - 1);
+            CoordinateModel actual = coordinateModels.get(i);
             traveledDistance += calculateTraveledDistanceFromCoordinates(previous, actual);
         }
 
         return traveledDistance;
     }
 
-    double calculateTraveledDistanceFromCoordinates(Coordinate previous, Coordinate actual) {
+    double calculateTraveledDistanceFromCoordinates(CoordinateModel previous, CoordinateModel actual) {
 
         return Math.sqrt(Math.pow((actual.x() - previous.x()), 2) +
             Math.pow((actual.y() - previous.y()), 2));
     }
 
-    public Map<Long, List<Coordinate>> getVehicleData() {
+    public Map<Long, List<CoordinateModel>> getVehicleData() {
 
         return Collections.unmodifiableMap(vehicleData);
     }

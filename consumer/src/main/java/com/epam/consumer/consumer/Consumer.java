@@ -1,6 +1,6 @@
 package com.epam.consumer.consumer;
 
-import com.epam.consumer.model.Coordinate;
+import com.epam.schema.Coordinate;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 public interface Consumer {
