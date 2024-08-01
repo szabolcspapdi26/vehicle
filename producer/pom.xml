@@ -17,6 +17,9 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <mapstruct.version>1.5.5.Final</mapstruct.version>
+    <avro.maven.plugin.version>1.11.3</avro.maven.plugin.version>
+    <schema.registry.url>http://localhost:8081</schema.registry.url>
   </properties>
 
   <repositories>
@@ -76,13 +79,13 @@
     <dependency>
       <groupId>org.mapstruct</groupId>
       <artifactId>mapstruct</artifactId>
-      <version>1.5.5.Final</version>
+      <version>${mapstruct.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.avro</groupId>
       <artifactId>avro-maven-plugin</artifactId>
-      <version>1.11.3</version>
+      <version>${avro.maven.plugin.version}</version>
     </dependency>
 
     <dependency>
@@ -112,7 +115,7 @@
             <path>
               <groupId>org.mapstruct</groupId>
               <artifactId>mapstruct-processor</artifactId>
-              <version>1.5.5.Final</version>
+              <version>${mapstruct.version}</version>
             </path>
             <path>
               <groupId>org.projectlombok</groupId>
@@ -139,7 +142,7 @@
         <version>7.7.0</version>
         <configuration>
           <schemaRegistryUrls>
-            <param>http://localhost:8081</param>
+            <param>${schema.registry.url}</param>
           </schemaRegistryUrls>
           <outputDirectory>${project.build.directory}/avro</outputDirectory>
           <subjectPatterns>
@@ -160,7 +163,7 @@
       <plugin>
         <groupId>org.apache.avro</groupId>
         <artifactId>avro-maven-plugin</artifactId>
-        <version>1.11.3</version>
+        <version>${avro.maven.plugin.version}</version>
         <configuration>
           <sourceDirectory>${project.build.directory}/avro</sourceDirectory>
           <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
