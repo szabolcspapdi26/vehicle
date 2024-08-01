@@ -5,8 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epam.producer.dto.CoordinateDto;
 import com.epam.producer.dto.VehicleDto;
-import com.epam.producer.model.Coordinate;
-import com.epam.producer.model.Vehicle;
+import com.epam.schema.Coordinate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +21,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,16 +31,16 @@ import org.springframework.test.web.servlet.MockMvc;
 @ActiveProfiles(value = "test")
 @EmbeddedKafka(partitions = 1)
 @AutoConfigureMockMvc
-class VehicleControllerIntegrationTest {
+class VehicleModelControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-    private List<Vehicle> vehicleData;
+    private List<Coordinate> vehicleSchemaCoordinates;
 
     @BeforeEach
     void setup() {
-        vehicleData = new ArrayList<>();
+        vehicleSchemaCoordinates = new ArrayList<>();
     }
 
     @Test
@@ -62,9 +59,8 @@ class VehicleControllerIntegrationTest {
 
         // THEN
         Awaitility.await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
-            Assertions.assertEquals(1, vehicleData.size());
-            Assertions.assertEquals(1L, vehicleData.get(0).id());
-            Assertions.assertEquals(expectedCoordinate, vehicleData.get(0).coordinate());
+            Assertions.assertEquals(1, vehicleSchemaCoordinates.size());
+            Assertions.assertEquals(expectedCoordinate, vehicleSchemaCoordinates.get(0));
         });
     }
 
@@ -81,7 +77,7 @@ class VehicleControllerIntegrationTest {
             .andExpect(status().isBadRequest());
 
         // THEN
-        Assertions.assertEquals(0, vehicleData.size());
+        Assertions.assertEquals(0, vehicleSchemaCoordinates.size());
     }
 
     @Test
@@ -97,7 +93,7 @@ class VehicleControllerIntegrationTest {
             .andExpect(status().isBadRequest());
 
         // THEN
-        Assertions.assertEquals(0, vehicleData.size());
+        Assertions.assertEquals(0, vehicleSchemaCoordinates.size());
     }
 
     @Test
@@ -113,7 +109,7 @@ class VehicleControllerIntegrationTest {
             .andExpect(status().isBadRequest());
 
         // THEN
-        Assertions.assertEquals(0, vehicleData.size());
+        Assertions.assertEquals(0, vehicleSchemaCoordinates.size());
     }
 
     @Test
@@ -129,13 +125,12 @@ class VehicleControllerIntegrationTest {
             .andExpect(status().isBadRequest());
 
         // THEN
-        Assertions.assertEquals(0, vehicleData.size());
+        Assertions.assertEquals(0, vehicleSchemaCoordinates.size());
     }
 
     @KafkaListener(topics = "input", groupId = "test-group")
     public void consume(ConsumerRecord<Long, Coordinate> record) {
-        Vehicle vehicle = new Vehicle(record.key(), record.value());
 
-        vehicleData.add(vehicle);
+        vehicleSchemaCoordinates.add(record.value());
     }
 }

@@ -19,6 +19,21 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>confluent</id>
+      <name>Confluent</name>
+      <url>https://packages.confluent.io/maven/</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>confluent</id>
+      <url>https://packages.confluent.io/maven/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -65,12 +80,23 @@
     </dependency>
 
     <dependency>
+      <groupId>org.apache.avro</groupId>
+      <artifactId>avro-maven-plugin</artifactId>
+      <version>1.11.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.confluent</groupId>
+      <artifactId>kafka-avro-serializer</artifactId>
+      <version>7.7.0</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
       <version>4.1.0</version>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
 
   <build>
@@ -105,6 +131,48 @@
             </dependency>
           </annotationProcessorPaths>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>io.confluent</groupId>
+        <artifactId>kafka-schema-registry-maven-plugin</artifactId>
+        <version>7.7.0</version>
+        <configuration>
+          <schemaRegistryUrls>
+            <param>http://localhost:8081</param>
+          </schemaRegistryUrls>
+          <outputDirectory>${project.build.directory}/avro</outputDirectory>
+          <subjectPatterns>
+            <param>input-value</param>
+          </subjectPatterns>
+        </configuration>
+        <executions>
+          <execution>
+            <id>name</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>download</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro-maven-plugin</artifactId>
+        <version>1.11.3</version>
+        <configuration>
+          <sourceDirectory>${project.build.directory}/avro</sourceDirectory>
+          <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>schema</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

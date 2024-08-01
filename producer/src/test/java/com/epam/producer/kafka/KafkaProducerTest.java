@@ -1,7 +1,9 @@
 package com.epam.producer.kafka;
 
-import com.epam.producer.model.Coordinate;
-import com.epam.producer.model.Vehicle;
+import com.epam.producer.mapper.VehicleMapper;
+import com.epam.producer.model.CoordinateModel;
+import com.epam.producer.model.VehicleModel;
+import com.epam.schema.Coordinate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,22 +16,28 @@ import org.springframework.kafka.core.KafkaTemplate;
 class KafkaProducerTest {
     @Mock
     private KafkaTemplate<Long, Coordinate> kafkaTemplate;
+    @Mock
+    private VehicleMapper vehicleMapper;
     @InjectMocks
     private KafkaProducer kafkaProducer;
 
     @Test
     void sendVehicle_validVehicleGiven_kafkaTemplateSendMethodCalled() {
         // GIVEN
+        CoordinateModel coordinateModel = new CoordinateModel(12.2, 12.2);
+
+        VehicleModel vehicleModel = new VehicleModel(1L, coordinateModel);
+
         Coordinate coordinate = new Coordinate(12.2, 12.2);
 
-        Vehicle vehicle = new Vehicle(1L, coordinate);
+        Mockito.when(vehicleMapper.toCoordinateSchema(coordinateModel)).thenReturn(coordinate);
 
         String topic = "input";
 
         // WHEN
-        kafkaProducer.sendVehicle(vehicle);
+        kafkaProducer.sendVehicle(vehicleModel);
 
         // THEN
-        Mockito.verify(kafkaTemplate).send(topic, vehicle.id(), vehicle.coordinate());
+        Mockito.verify(kafkaTemplate).send(topic, vehicleModel.id(), coordinate);
     }
 }

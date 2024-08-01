@@ -3,8 +3,8 @@ package com.epam.producer.controller;
 import com.epam.producer.dto.CoordinateDto;
 import com.epam.producer.dto.VehicleDto;
 import com.epam.producer.mapper.VehicleMapper;
-import com.epam.producer.model.Coordinate;
-import com.epam.producer.model.Vehicle;
+import com.epam.producer.model.CoordinateModel;
+import com.epam.producer.model.VehicleModel;
 import com.epam.producer.service.VehicleService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
-class VehicleControllerTest {
+class VehicleModelControllerTest {
     @Mock
     private VehicleMapper vehicleMapper;
     @Mock
@@ -32,11 +32,11 @@ class VehicleControllerTest {
 
         VehicleDto vehicleDto = new VehicleDto(1L, coordinateDto);
 
-        Coordinate coordinate = new Coordinate(12.2, 12.2);
+        CoordinateModel coordinateModel = new CoordinateModel(12.2, 12.2);
 
-        Vehicle vehicle = new Vehicle(1L, coordinate);
+        VehicleModel vehicleModel = new VehicleModel(1L, coordinateModel);
 
-        Mockito.when(vehicleMapper.toVehicle(vehicleDto)).thenReturn(vehicle);
+        Mockito.when(vehicleMapper.toVehicleModel(vehicleDto)).thenReturn(vehicleModel);
 
         var expected = ResponseEntity.status(HttpStatus.CREATED).build();
 
@@ -44,8 +44,8 @@ class VehicleControllerTest {
         var actual = vehicleController.createVehicleData(vehicleDto);
 
         // THEN
-        Mockito.verify(vehicleMapper).toVehicle(vehicleDto);
-        Mockito.verify(vehicleService).processVehicle(vehicle);
+        Mockito.verify(vehicleMapper).toVehicleModel(vehicleDto);
+        Mockito.verify(vehicleService).processVehicle(vehicleModel);
         Assertions.assertEquals(actual, expected);
     }
 }

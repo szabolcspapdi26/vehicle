@@ -2,7 +2,7 @@ package com.epam.producer.controller;
 
 import com.epam.producer.dto.VehicleDto;
 import com.epam.producer.mapper.VehicleMapper;
-import com.epam.producer.model.Vehicle;
+import com.epam.producer.model.VehicleModel;
 import com.epam.producer.service.VehicleService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -24,9 +24,9 @@ public class VehicleController {
 
     @PostMapping(path = "/vehicle")
     public ResponseEntity<Void> createVehicleData(@RequestBody @Valid VehicleDto vehicleDto) {
-        Vehicle vehicle = vehicleMapper.toVehicle(vehicleDto);
+        VehicleModel vehicleModel = vehicleMapper.toVehicleModel(vehicleDto);
 
-        vehicleService.processVehicle(vehicle);
+        vehicleService.processVehicle(vehicleModel);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

@@ -3,4 +3,4 @@ package com.epam.producer.model;
 import lombok.Builder;
 
 @Builder
-public record Coordinate(Double x, Double y) { }
+public record CoordinateModel(Double x, Double y) { }

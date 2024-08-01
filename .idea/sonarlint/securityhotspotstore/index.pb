@@ -11,14 +11,8 @@ Aproducer/src/main/java/com/epam/producer/ProducerApplication.java,f\f\ffb19f10
 consumer/pom.xml,a\e\ae0fe1fce8f97995f0225aa73104a92a194ef0d5
 q
 Aconsumer/src/main/java/com/epam/consumer/ConsumerApplication.java,c\3\c3076fde24763a07a77f84a78c410d99e2e4d4a8
-k
-;producer/src/main/java/com/epam/producer/model/Vehicle.java,9\d\9da4291b2ea45c0fb8b9a7fe3db7f0173af70365
-~
-Nproducer/src/test/java/com/epam/producer/controller/VehicleControllerTest.java,d\6\d6b9b3b0cde9c7c5921fee826b34991603ea8603
 z
 Jproducer/src/main/java/com/epam/producer/controller/VehicleController.java,5\e\5e77265d06025c3e5c091df9a1bf68f5dbb13b21
-|
-Lproducer/src/test/java/com/epam/producer/service/VehicleServiceImplTest.java,a\1\a128a5d698f64543c6cd0a357bcb4a902b603ad4
 t
 Dproducer/src/main/java/com/epam/producer/service/VehicleService.java,2\d\2dc094126e5bdccf233257c775d00f7a89256df2
 x
@@ -27,8 +21,6 @@ q
 Aproducer/src/main/java/com/epam/producer/kafka/KafkaProducer.java,9\4\945487f6b6d0d75270d7a79ae4d2a563ddc4c26d
 u
 Eproducer/src/test/java/com/epam/producer/kafka/KafkaProducerTest.java,a\b\ab955af8ffe424a9fb7f984f1ae4656dd415fa5b
-ä
-Zproducer/src/test/java/com/epam/producer/integration/VehicleControllerIntegrationTest.java,b\5\b5e6b028de166294f5c64c42bf40689a4388a56b
 r
 Bproducer/src/main/java/com/epam/producer/aspect/LoggingAspect.java,c\d\cd90b15d75d5485b873c180231140c5a7d60b9f7
 w
@@ -46,8 +38,6 @@ Cconsumer/src/main/java/com/epam/consumer/consumer/ConsumerImpl.java,5\7\576c57
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
-n
->producer/src/main/java/com/epam/producer/model/Coordinate.java,7\b\7bb195ca72267764a6461a6a9fcda727730456e8
 w
 Gconsumer/src/test/java/com/epam/consumer/consumer/ConsumerImplTest.java,e\3\e327725a3027e1bc985eb350242e1db4cc3aae04
 
@@ -70,3 +60,13 @@ r
 Bproducer/src/main/java/com/epam/producer/mapper/VehicleMapper.java,f\3\f3c2ab85e1a956e96328443186adde846ac33eec
 o
 ?producer/src/main/java/com/epam/producer/dto/CoordinateDto.java,c\2\c23a9b4a2c17f454307193ad65efe6b6c4f51316
+Å
+Qproducer/src/test/java/com/epam/producer/service/VehicleModelServiceImplTest.java,f\3\f3e85b186dbcb41be84ee24610deb77d73663702
+è
+_producer/src/test/java/com/epam/producer/integration/VehicleModelControllerIntegrationTest.java,f\5\f5fe01d85c0ec78513ca4a16894942c3ed33354a
+s
+Cproducer/src/main/java/com/epam/producer/model/CoordinateModel.java,9\9\9900eb2b0428ba5b76de4539c98defc5eefc2c9b
+p
+@producer/src/main/java/com/epam/producer/model/VehicleModel.java,1\d\1db3ac8510b1a5db723282c952036e67c64605d0
+É
+Sproducer/src/test/java/com/epam/producer/controller/VehicleModelControllerTest.java,b\5\b54a047f44cdea14b25ce58a1bc1fb341c6cd5ef

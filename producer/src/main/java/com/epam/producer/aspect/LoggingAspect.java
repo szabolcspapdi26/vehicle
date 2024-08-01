@@ -1,6 +1,6 @@
 package com.epam.producer.aspect;
 
-import com.epam.producer.model.Vehicle;
+import com.epam.producer.model.VehicleModel;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -32,10 +32,10 @@ public class LoggingAspect {
     public void logAfterSuccessfulMethodInvocation(JoinPoint joinPoint) {
         String className = joinPoint.getSourceLocation().getWithinType().getSimpleName();
         String methodName = joinPoint.getSignature().getName();
-        Vehicle vehicle = (Vehicle) joinPoint.getArgs()[0];
+        VehicleModel vehicleModel = (VehicleModel) joinPoint.getArgs()[0];
 
         log.info("After successful method invocation of: " + className
         + " class and " + methodName + " method with vehicle argument: "
-        + vehicle.toString());
+        + vehicleModel.toString());
     }
 }

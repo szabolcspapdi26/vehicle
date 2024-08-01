@@ -8,16 +8,19 @@
         <list>
           <option value="producer" />
           <option value="consumer" />
+          <option value="producer" />
         </list>
       </option>
       <option name="ignoredPackages">
         <list>
           <option value="commons-collections:commons-collections:3.2.2" />
           <option value="commons-collections:commons-collections:3.2.2" />
+          <option value="org.apache.commons:commons-compress:1.22" />
         </list>
       </option>
       <option name="ignoredReasons">
         <list>
+          <option value="Not exploitable" />
           <option value="Not exploitable" />
           <option value="Not exploitable" />
         </list>
