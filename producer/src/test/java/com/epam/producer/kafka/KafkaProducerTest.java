@@ -28,7 +28,9 @@ class KafkaProducerTest {
 
         VehicleModel vehicleModel = new VehicleModel(1L, coordinateModel);
 
-        Coordinate coordinate = new Coordinate(12.2, 12.2);
+        Coordinate coordinate = new Coordinate();
+        coordinate.setX(12.2);
+        coordinate.setY(12.2);
 
         Mockito.when(vehicleMapper.toCoordinateSchema(coordinateModel)).thenReturn(coordinate);
 

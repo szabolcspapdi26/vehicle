@@ -49,7 +49,9 @@ class VehicleModelControllerIntegrationTest {
         CoordinateDto coordinateDto = new CoordinateDto(12.2, 12.2);
         VehicleDto vehicleDto = new VehicleDto(1L, coordinateDto);
 
-        Coordinate expectedCoordinate = new Coordinate(12.2, 12.2);
+        Coordinate expectedCoordinate =  new Coordinate();
+        expectedCoordinate.setX(12.2);
+        expectedCoordinate.setY(12.2);
 
         // WHEN
         mockMvc.perform(post("/vehicle")
@@ -130,7 +132,6 @@ class VehicleModelControllerIntegrationTest {
 
     @KafkaListener(topics = "input", groupId = "test-group")
     public void consume(ConsumerRecord<Long, Coordinate> record) {
-
         vehicleSchemaCoordinates.add(record.value());
     }
 }

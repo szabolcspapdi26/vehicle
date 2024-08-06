@@ -7,7 +7,11 @@ spring:
       schema.registry.url: http://localhost:8081
     producer:
       key-serializer: org.apache.kafka.common.serialization.LongSerializer
-      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      value-serializer: io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializer
+      properties:
+        #use.schema.id: 1000
+        #use.latest.version: true
+        auto.register.schemas: false
 
 server:
   port: 8090

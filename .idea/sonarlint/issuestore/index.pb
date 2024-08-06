@@ -31,8 +31,6 @@ o
 ?consumer/src/main/java/com/epam/consumer/producer/Producer.java,1\f\1f411684a97ba54f0283334a60fad7fbc1592e5c
 o
 ?consumer/src/main/java/com/epam/consumer/consumer/Consumer.java,0\4\040a4e1f5a19b504cabf6ca7046928c3a78d95fc
-n
->consumer/src/main/java/com/epam/consumer/model/Coordinate.java,9\4\942f0d800cc8213c850961ca1060b71e3e8f1079
 s
 Cconsumer/src/main/java/com/epam/consumer/consumer/ConsumerImpl.java,5\7\576c5772263cfba2a3e36b86bdd110a711af3e64
 :
@@ -74,3 +72,5 @@ r
 Bconsumer/src/main/java/com/epam/consumer/mapper/VehicleMapper.java,2\7\27e3e7fefcce71f5a76c9282955d1721a2422f87
 s
 Cconsumer/src/main/java/com/epam/consumer/model/CoordinateModel.java,0\7\0746b5008ff9c7c5faa99e3c2571cd640ecb15f2
+h
+8producer/src/test/java/com/epam/producer/TestConfig.java,4\1\41a0c5ff13d3d0743b20588377f9d61b69e5a7b0

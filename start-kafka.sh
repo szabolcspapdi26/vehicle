@@ -8,8 +8,8 @@ until $(curl --output /dev/null --silent --head --fail http://localhost:8081/sub
     sleep 5
 done
 
-curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \
-  --data '{
-    "schema": "{\"type\":\"record\",\"name\":\"Coordinate\",\"namespace\":\"com.epam.schema\",\"fields\":[{\"name\":\"x\",\"type\":\"double\"},{\"name\":\"y\",\"type\":\"double\"}]}"
-  }' \
-  http://localhost:8081/subjects/input-value/versions
+  curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \
+    --data '{
+      "schema": "{\"$schema\": \"http://json-schema.org/draft-04/schema#\", \"title\": \"Coordinate\", \"type\": \"object\", \"properties\": {\"x\": {\"type\": \"number\"}, \"y\": {\"type\": \"number\"}}, \"required\": [\"x\", \"y\"]}",
+      "schemaType": "JSON"}' \
+    http://localhost:8081/subjects/input-value/versions
