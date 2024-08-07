@@ -32,106 +32,106 @@ import org.springframework.test.web.servlet.MockMvc;
 @EmbeddedKafka(partitions = 1)
 @AutoConfigureMockMvc
 class VehicleModelControllerIntegrationTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    private List<Coordinate> vehicleSchemaCoordinates;
+  @Autowired
+  private MockMvc mockMvc;
+  @Autowired
+  private ObjectMapper objectMapper;
+  private List<Coordinate> vehicleSchemaCoordinates;
 
-    @BeforeEach
-    void setup() {
-        vehicleSchemaCoordinates = new ArrayList<>();
-    }
+  @BeforeEach
+  void setup() {
+    vehicleSchemaCoordinates = new ArrayList<>();
+  }
 
-    @Test
-    void createVehicle_validVehicleDataProvided_dataSentToKafka() throws Exception {
-        // GIVEN
-        CoordinateDto coordinateDto = new CoordinateDto(12.2, 12.2);
-        VehicleDto vehicleDto = new VehicleDto(1L, coordinateDto);
+  @Test
+  void createVehicle_validVehicleDataProvided_dataSentToKafka() throws Exception {
+    // GIVEN
+    CoordinateDto coordinateDto = new CoordinateDto(12.2, 12.2);
+    VehicleDto vehicleDto = new VehicleDto(1L, coordinateDto);
 
-        Coordinate expectedCoordinate =  new Coordinate();
-        expectedCoordinate.setX(12.2);
-        expectedCoordinate.setY(12.2);
+    Coordinate expectedCoordinate = new Coordinate();
+    expectedCoordinate.setX(12.2);
+    expectedCoordinate.setY(12.2);
 
-        // WHEN
-        mockMvc.perform(post("/vehicle")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(vehicleDto)))
-            .andExpect(status().isCreated());
+    // WHEN
+    mockMvc.perform(post("/vehicle")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(vehicleDto)))
+        .andExpect(status().isCreated());
 
-        // THEN
-        Awaitility.await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
-            Assertions.assertEquals(1, vehicleSchemaCoordinates.size());
-            Assertions.assertEquals(expectedCoordinate, vehicleSchemaCoordinates.get(0));
-        });
-    }
+    // THEN
+    Awaitility.await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
+      Assertions.assertEquals(1, vehicleSchemaCoordinates.size());
+      Assertions.assertEquals(expectedCoordinate, vehicleSchemaCoordinates.get(0));
+    });
+  }
 
-    @Test
-    void createVehicle_missingVehicleId_dataNotSentToKafka() throws Exception {
-        // GIVEN
-        CoordinateDto coordinateDto = new CoordinateDto(12.2, 12.2);
-        VehicleDto vehicleDto = new VehicleDto(null, coordinateDto);
+  @Test
+  void createVehicle_missingVehicleId_dataNotSentToKafka() throws Exception {
+    // GIVEN
+    CoordinateDto coordinateDto = new CoordinateDto(12.2, 12.2);
+    VehicleDto vehicleDto = new VehicleDto(null, coordinateDto);
 
-        // WHEN
-        mockMvc.perform(post("/vehicle")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(vehicleDto)))
-            .andExpect(status().isBadRequest());
+    // WHEN
+    mockMvc.perform(post("/vehicle")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(vehicleDto)))
+        .andExpect(status().isBadRequest());
 
-        // THEN
-        Assertions.assertEquals(0, vehicleSchemaCoordinates.size());
-    }
+    // THEN
+    Assertions.assertEquals(0, vehicleSchemaCoordinates.size());
+  }
 
-    @Test
-    void createVehicle_missingXCoordinates_dataNotSentToKafka() throws Exception {
-        // GIVEN
-        CoordinateDto coordinateDto = new CoordinateDto(null, 12.2);
-        VehicleDto vehicleDto = new VehicleDto(1L, coordinateDto);
+  @Test
+  void createVehicle_missingxCoordinates_dataNotSentToKafka() throws Exception {
+    // GIVEN
+    CoordinateDto coordinateDto = new CoordinateDto(null, 12.2);
+    VehicleDto vehicleDto = new VehicleDto(1L, coordinateDto);
 
-        // WHEN
-        mockMvc.perform(post("/vehicle")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(vehicleDto)))
-            .andExpect(status().isBadRequest());
+    // WHEN
+    mockMvc.perform(post("/vehicle")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(vehicleDto)))
+        .andExpect(status().isBadRequest());
 
-        // THEN
-        Assertions.assertEquals(0, vehicleSchemaCoordinates.size());
-    }
+    // THEN
+    Assertions.assertEquals(0, vehicleSchemaCoordinates.size());
+  }
 
-    @Test
-    void createVehicle_missingYCoordinates_dataNotSentToKafka() throws Exception {
-        // GIVEN
-        CoordinateDto coordinateDto = new CoordinateDto(12.2, null);
-        VehicleDto vehicleDto = new VehicleDto(1L, coordinateDto);
+  @Test
+  void createVehicle_missingyCoordinates_dataNotSentToKafka() throws Exception {
+    // GIVEN
+    CoordinateDto coordinateDto = new CoordinateDto(12.2, null);
+    VehicleDto vehicleDto = new VehicleDto(1L, coordinateDto);
 
-        // WHEN
-        mockMvc.perform(post("/vehicle")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(vehicleDto)))
-            .andExpect(status().isBadRequest());
+    // WHEN
+    mockMvc.perform(post("/vehicle")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(vehicleDto)))
+        .andExpect(status().isBadRequest());
 
-        // THEN
-        Assertions.assertEquals(0, vehicleSchemaCoordinates.size());
-    }
+    // THEN
+    Assertions.assertEquals(0, vehicleSchemaCoordinates.size());
+  }
 
-    @Test
-    void createVehicle_vehicleIdIsBelowZero_dataNotSentToKafka() throws Exception {
-        // GIVEN
-        CoordinateDto coordinateDto = new CoordinateDto(12.2, 12.2);
-        VehicleDto vehicleDto = new VehicleDto(-1L, coordinateDto);
+  @Test
+  void createVehicle_vehicleIdIsBelowZero_dataNotSentToKafka() throws Exception {
+    // GIVEN
+    CoordinateDto coordinateDto = new CoordinateDto(12.2, 12.2);
+    VehicleDto vehicleDto = new VehicleDto(-1L, coordinateDto);
 
-        // WHEN
-        mockMvc.perform(post("/vehicle")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(vehicleDto)))
-            .andExpect(status().isBadRequest());
+    // WHEN
+    mockMvc.perform(post("/vehicle")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(vehicleDto)))
+        .andExpect(status().isBadRequest());
 
-        // THEN
-        Assertions.assertEquals(0, vehicleSchemaCoordinates.size());
-    }
+    // THEN
+    Assertions.assertEquals(0, vehicleSchemaCoordinates.size());
+  }
 
-    @KafkaListener(topics = "input", groupId = "test-group")
-    public void consume(ConsumerRecord<Long, Coordinate> record) {
-        vehicleSchemaCoordinates.add(record.value());
-    }
+  @KafkaListener(topics = "input", groupId = "test-group")
+  public void consume(ConsumerRecord<Long, Coordinate> record) {
+    vehicleSchemaCoordinates.add(record.value());
+  }
 }

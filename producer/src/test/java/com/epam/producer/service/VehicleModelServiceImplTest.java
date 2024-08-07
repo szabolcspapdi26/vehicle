@@ -12,28 +12,28 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class VehicleModelServiceImplTest {
-    @Mock
-    private KafkaProducer kafkaProducer;
-    @InjectMocks
-    private VehicleServiceImpl vehicleService;
+  @Mock
+  private KafkaProducer kafkaProducer;
+  @InjectMocks
+  private VehicleServiceImpl vehicleService;
 
-    @Test
-    void processVehicle_validVehicleReceived_kafkaProducerCalled() {
-        // GIVEN
-        CoordinateModel coordinateModel = CoordinateModel.builder()
-            .x(12.2)
-            .y(12.2)
-            .build();
+  @Test
+  void processVehicle_validVehicleReceived_kafkaProducerCalled() {
+    // GIVEN
+    CoordinateModel coordinateModel = CoordinateModel.builder()
+        .x(12.2)
+        .y(12.2)
+        .build();
 
-        VehicleModel vehicleModel = VehicleModel.builder()
-            .id(1L)
-            .coordinate(coordinateModel)
-            .build();
+    VehicleModel vehicleModel = VehicleModel.builder()
+        .id(1L)
+        .coordinate(coordinateModel)
+        .build();
 
-        // WHEN
-        vehicleService.processVehicle(vehicleModel);
+    // WHEN
+    vehicleService.processVehicle(vehicleModel);
 
-        // THEN
-        Mockito.verify(kafkaProducer).sendVehicle(vehicleModel);
-    }
+    // THEN
+    Mockito.verify(kafkaProducer).sendVehicle(vehicleModel);
+  }
 }

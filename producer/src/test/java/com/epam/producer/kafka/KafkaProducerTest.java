@@ -14,32 +14,32 @@ import org.springframework.kafka.core.KafkaTemplate;
 
 @ExtendWith(MockitoExtension.class)
 class KafkaProducerTest {
-    @Mock
-    private KafkaTemplate<Long, Coordinate> kafkaTemplate;
-    @Mock
-    private VehicleMapper vehicleMapper;
-    @InjectMocks
-    private KafkaProducer kafkaProducer;
+  @Mock
+  private KafkaTemplate<Long, Coordinate> kafkaTemplate;
+  @Mock
+  private VehicleMapper vehicleMapper;
+  @InjectMocks
+  private KafkaProducer kafkaProducer;
 
-    @Test
-    void sendVehicle_validVehicleGiven_kafkaTemplateSendMethodCalled() {
-        // GIVEN
-        CoordinateModel coordinateModel = new CoordinateModel(12.2, 12.2);
+  @Test
+  void sendVehicle_validVehicleGiven_kafkaTemplateSendMethodCalled() {
+    // GIVEN
+    CoordinateModel coordinateModel = new CoordinateModel(12.2, 12.2);
 
-        VehicleModel vehicleModel = new VehicleModel(1L, coordinateModel);
+    Coordinate coordinate = new Coordinate();
+    coordinate.setX(12.2);
+    coordinate.setY(12.2);
 
-        Coordinate coordinate = new Coordinate();
-        coordinate.setX(12.2);
-        coordinate.setY(12.2);
+    VehicleModel vehicleModel = new VehicleModel(1L, coordinateModel);
 
-        Mockito.when(vehicleMapper.toCoordinateSchema(coordinateModel)).thenReturn(coordinate);
+    Mockito.when(vehicleMapper.toCoordinateSchema(coordinateModel)).thenReturn(coordinate);
 
-        String topic = "input";
+    String topic = "input";
 
-        // WHEN
-        kafkaProducer.sendVehicle(vehicleModel);
+    // WHEN
+    kafkaProducer.sendVehicle(vehicleModel);
 
-        // THEN
-        Mockito.verify(kafkaTemplate).send(topic, vehicleModel.id(), coordinate);
-    }
+    // THEN
+    Mockito.verify(kafkaTemplate).send(topic, vehicleModel.id(), coordinate);
+  }
 }

@@ -18,34 +18,34 @@ import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
 class VehicleModelControllerTest {
-    @Mock
-    private VehicleMapper vehicleMapper;
-    @Mock
-    private VehicleService vehicleService;
-    @InjectMocks
-    private VehicleController vehicleController;
+  @Mock
+  private VehicleMapper vehicleMapper;
+  @Mock
+  private VehicleService vehicleService;
+  @InjectMocks
+  private VehicleController vehicleController;
 
-    @Test
-    void createVehicleData_validVehicleDataProvided_createdResponseReturned() {
-        // GIVEN
-        CoordinateDto coordinateDto = new CoordinateDto(12.2, 12.2);
+  @Test
+  void createVehicleData_validVehicleDataProvided_createdResponseReturned() {
+    // GIVEN
+    CoordinateDto coordinateDto = new CoordinateDto(12.2, 12.2);
 
-        VehicleDto vehicleDto = new VehicleDto(1L, coordinateDto);
+    VehicleDto vehicleDto = new VehicleDto(1L, coordinateDto);
 
-        CoordinateModel coordinateModel = new CoordinateModel(12.2, 12.2);
+    CoordinateModel coordinateModel = new CoordinateModel(12.2, 12.2);
 
-        VehicleModel vehicleModel = new VehicleModel(1L, coordinateModel);
+    VehicleModel vehicleModel = new VehicleModel(1L, coordinateModel);
 
-        Mockito.when(vehicleMapper.toVehicleModel(vehicleDto)).thenReturn(vehicleModel);
+    Mockito.when(vehicleMapper.toVehicleModel(vehicleDto)).thenReturn(vehicleModel);
 
-        var expected = ResponseEntity.status(HttpStatus.CREATED).build();
+    var expected = ResponseEntity.status(HttpStatus.CREATED).build();
 
-        // WHEN
-        var actual = vehicleController.createVehicleData(vehicleDto);
+    // WHEN
+    var actual = vehicleController.createVehicleData(vehicleDto);
 
-        // THEN
-        Mockito.verify(vehicleMapper).toVehicleModel(vehicleDto);
-        Mockito.verify(vehicleService).processVehicle(vehicleModel);
-        Assertions.assertEquals(actual, expected);
-    }
+    // THEN
+    Mockito.verify(vehicleMapper).toVehicleModel(vehicleDto);
+    Mockito.verify(vehicleService).processVehicle(vehicleModel);
+    Assertions.assertEquals(actual, expected);
+  }
 }

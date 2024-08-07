@@ -13,5 +13,6 @@ spring:
         #use.latest.version: true
         auto.register.schemas: false
 
-server:
-  port: 8090
+server.port: 8090
+#logging.level.org.springframework.web: DEBUG
+logging.pattern.console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %X{CorrelationId} %logger{36} - %msg%n"

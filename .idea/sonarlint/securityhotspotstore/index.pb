@@ -72,5 +72,11 @@ r
 Bconsumer/src/main/java/com/epam/consumer/mapper/VehicleMapper.java,2\7\27e3e7fefcce71f5a76c9282955d1721a2422f87
 s
 Cconsumer/src/main/java/com/epam/consumer/model/CoordinateModel.java,0\7\0746b5008ff9c7c5faa99e3c2571cd640ecb15f2
-h
-8producer/src/test/java/com/epam/producer/TestConfig.java,4\1\41a0c5ff13d3d0743b20588377f9d61b69e5a7b0
+N
+producer/checkstyle-google.xml,f\c\fc2bcd5b0d43c78f2e2332c36f6d072fe74096d1
+u
+Eproducer/src/test/java/com/epam/producer/ProducerApplicationTest.java,5\7\574b63221ca46fbe9c609168f8b5e1fec9edabc8
+Å
+Qproducer/src/test/java/com/epam/producer/integration/ProducerApplicationTest.java,d\7\d71e0a9fc59b93a314ab98c536a8268e95d02f15
+j
+:producer/src/test/java/com/epam/schema/CoordinateTest.java,2\8\28928972c52c79127989eacb76d54b882b317fa6
