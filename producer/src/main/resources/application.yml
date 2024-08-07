@@ -14,5 +14,8 @@ spring:
         auto.register.schemas: false
 
 server.port: 8090
-#logging.level.org.springframework.web: DEBUG
 logging.pattern.console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %X{CorrelationId} %logger{36} - %msg%n"
+anyvariable: ENC(F3H2XSOsno235Hjq99a/gGydzT1Qg+iNbSZrHG4bvh6sNV5qT/3C3vvdtkFTdHbs)
+jasypt:
+  encryptor:
+    password: ${ENCRYPTION_KEY}

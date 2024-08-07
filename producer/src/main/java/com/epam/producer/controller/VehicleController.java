@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class VehicleController {
   private final VehicleService vehicleService;
   private final VehicleMapper vehicleMapper;
+  @Value("${anyvariable}")
+  private String anyVariable;
 
   /**
    * Creates a new vehicle entry to kafka based on the provided vehicle data.
@@ -36,7 +39,7 @@ public class VehicleController {
   @PostMapping(path = "/vehicle")
   public ResponseEntity<Void> createVehicleData(@RequestBody @Valid VehicleDto vehicleDto) {
 
-    log.info("Called createVehicleData with {}", vehicleDto);
+    log.info("Called createVehicleData with {}, {}", vehicleDto, anyVariable);
 
     VehicleModel vehicleModel = vehicleMapper.toVehicleModel(vehicleDto);
 
