@@ -9,6 +9,7 @@
           <option value="producer" />
           <option value="consumer" />
           <option value="producer" />
+          <option value="kafka-streams" />
         </list>
       </option>
       <option name="ignoredPackages">
@@ -16,10 +17,12 @@
           <option value="commons-collections:commons-collections:3.2.2" />
           <option value="commons-collections:commons-collections:3.2.2" />
           <option value="org.apache.commons:commons-compress:1.22" />
+          <option value="commons-collections:commons-collections:3.2.2" />
         </list>
       </option>
       <option name="ignoredReasons">
         <list>
+          <option value="Not exploitable" />
           <option value="Not exploitable" />
           <option value="Not exploitable" />
           <option value="Not exploitable" />
