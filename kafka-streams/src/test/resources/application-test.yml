@@ -1,0 +1,16 @@
+spring:
+  kafka:
+    bootstrap-servers: ${spring.embedded.kafka.brokers}
+    properties:
+      schema.registry.url: mock://not-used
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
+      value-deserializer: io.confluent.kafka.serializers.json.KafkaJsonSchemaDeserializer
+      properties:
+        json.value.type: com.epam.schema.Vehicle
+    streams:
+      application-id: vehicle-kafka-streams-test
+      properties:
+        default.key.serde: org.apache.kafka.common.serialization.Serdes$LongSerde
+        default.value.serde: io.confluent.kafka.streams.serdes.json.KafkaJsonSchemaSerde
+        json.value.type: com.epam.schema.Coordinate

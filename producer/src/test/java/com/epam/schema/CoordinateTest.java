@@ -2,7 +2,6 @@ package com.epam.schema;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

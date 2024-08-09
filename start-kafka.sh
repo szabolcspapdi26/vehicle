@@ -13,3 +13,9 @@ done
       "schema": "{\"$schema\": \"http://json-schema.org/draft-04/schema#\", \"title\": \"Coordinate\", \"type\": \"object\", \"properties\": {\"x\": {\"type\": \"number\"}, \"y\": {\"type\": \"number\"}}, \"required\": [\"x\", \"y\"]}",
       "schemaType": "JSON"}' \
     http://localhost:8081/subjects/input-value/versions
+
+  curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \
+      --data '{
+        "schema": "{\"$schema\": \"http://json-schema.org/draft-04/schema#\", \"title\": \"Vehicle\", \"type\": \"object\", \"properties\": {\"id\": {\"type\": \"integer\", \"format\": \"int64\"}, \"x\": {\"type\": \"number\"}, \"y\": {\"type\": \"number\"}}, \"required\": [\"id\", \"x\", \"y\"]}",
+        "schemaType": "JSON"}' \
+      http://localhost:8081/subjects/output-value/versions
