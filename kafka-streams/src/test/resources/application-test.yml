@@ -8,9 +8,10 @@ spring:
       value-deserializer: io.confluent.kafka.serializers.json.KafkaJsonSchemaDeserializer
       properties:
         json.value.type: com.epam.schema.Vehicle
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.LongSerializer
+      value-serializer: io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializer
+      properties:
+        auto.register.schemas: true
     streams:
       application-id: vehicle-kafka-streams-test
-      properties:
-        default.key.serde: org.apache.kafka.common.serialization.Serdes$LongSerde
-        default.value.serde: io.confluent.kafka.streams.serdes.json.KafkaJsonSchemaSerde
-        json.value.type: com.epam.schema.Coordinate

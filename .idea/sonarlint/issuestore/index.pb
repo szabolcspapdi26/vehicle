@@ -94,9 +94,9 @@ Skafka-streams/src/test/java/com/epam/kafkastreams/topology/VehicleTopologyTest.
 ^kafka-streams/src/test/java/com/epam/kafkastreams/integration/KafkaStreamsApplicationTest.java,8\c\8c53470e71fc74bc103fd40553b3d5a5ae633aef
 o
 ?kafka-streams/src/test/java/com/epam/schema/CoordinateTest.java,b\b\bba188b6fbb094b938dbfc2f2a7ca2c05bb89e66
-g
-7producer/src/test/java/com/epam/schema/VehicleTest.java,a\0\a05f5ebb5a3e1b98460e4f087dd56e973598d2cf
 l
 <kafka-streams/src/test/java/com/epam/schema/VehicleTest.java,4\f\4f8f94e2487949681d419fa16a1113383e1f9c40
 w
 G.idea/sonarlint/issuestore/f/f/ffb19f10d12695b60c37e7193c641db63e59fb30,6\3\63335c53d206ffda7bf3058cbf47e748b897296a
+
+_kafka-streams/src/main/java/com/epam/kafkastreams/configuration/KafkaJsonSchemaSerdeConfig.java,d\6\d6e7a034707da04ef5796e5cbc39e46165d7fcfd

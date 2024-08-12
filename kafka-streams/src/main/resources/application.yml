@@ -7,7 +7,3 @@ spring:
       auto.register.schemas: false
     streams:
       application-id: vehicle-kafka-streams
-      properties:
-        default.key.serde: org.apache.kafka.common.serialization.Serdes$LongSerde
-        default.value.serde: io.confluent.kafka.streams.serdes.json.KafkaJsonSchemaSerde
-        json.value.type: com.epam.schema.Coordinate

@@ -4,29 +4,21 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 
 import com.epam.schema.Coordinate;
 import com.epam.schema.Vehicle;
-import io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.LongSerializer;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -40,18 +32,12 @@ class KafkaStreamsIntegrationTest {
   private List<Vehicle> vehicleRecords;
   @Autowired
   private EmbeddedKafkaBroker embeddedKafkaBroker;
-
+  @Autowired
   private KafkaTemplate<Long, Coordinate> kafkaTemplate;
-  @Value("${spring.kafka.properties.schema.registry.url}")
-  private String schemaRegistryUrl;
 
   @BeforeEach
   void setup() {
     vehicleRecords = new ArrayList<>();
-
-    if (kafkaTemplate == null) {
-      kafkaTemplate = createProducer();
-    }
   }
 
   @Test
@@ -99,17 +85,5 @@ class KafkaStreamsIntegrationTest {
   @KafkaListener(topics = "output", groupId = "test-group")
   void consume(ConsumerRecord<Long, Vehicle> record) {
     vehicleRecords.add(record.value());
-  }
-
-  private KafkaTemplate<Long, Coordinate> createProducer() {
-    Map<String, Object> producerProps = KafkaTestUtils.producerProps(embeddedKafkaBroker);
-    producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class);
-    producerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-        KafkaJsonSchemaSerializer.class);
-    producerProps.put("schema.registry.url", schemaRegistryUrl);
-    ProducerFactory<Long, Coordinate> producerFactory =
-        new DefaultKafkaProducerFactory<>(producerProps);
-
-    return new KafkaTemplate<>(producerFactory);
   }
 }

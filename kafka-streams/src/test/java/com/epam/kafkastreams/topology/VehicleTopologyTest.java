@@ -1,12 +1,8 @@
 package com.epam.kafkastreams.topology;
 
-import static io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG;
-
+import com.epam.kafkastreams.configuration.KafkaJsonSchemaSerdeConfig;
 import com.epam.schema.Coordinate;
 import com.epam.schema.Vehicle;
-import io.confluent.kafka.streams.serdes.json.KafkaJsonSchemaSerde;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.TestInputTopic;
@@ -16,26 +12,19 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 class VehicleTopologyTest {
   private TestInputTopic<Long, Coordinate> testInputTopic;
   private TestOutputTopic<Long, Vehicle> testOutputTopic;
   private TopologyTestDriver topologyTestDriver;
-  private final VehicleTopology vehicleTopology = new VehicleTopology();
-  private KafkaJsonSchemaSerde<Coordinate> inputSerde;
-  private KafkaJsonSchemaSerde<Vehicle> outputSerde;
-  private String schemaRegistryUrl = "mock://not-used";
+  private final KafkaJsonSchemaSerdeConfig serdeConfig = new KafkaJsonSchemaSerdeConfig();
 
   @BeforeEach
   void setup() {
-    Map<String, Object> serdeConfig = new HashMap<>();
-    serdeConfig.put(SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
-
-    inputSerde = new KafkaJsonSchemaSerde<>(Coordinate.class);
-    inputSerde.configure(serdeConfig, false);
-
-    outputSerde = new KafkaJsonSchemaSerde<>(Vehicle.class);
-    outputSerde.configure(serdeConfig, false);
+    ReflectionTestUtils.setField(serdeConfig, "schemaRegistry", "mock://not-used");
+    VehicleTopology vehicleTopology = new VehicleTopology(serdeConfig.inputSerde(),
+        serdeConfig.outputSerde());
 
     StreamsBuilder streamsBuilder = new StreamsBuilder();
     vehicleTopology.processVehicle(streamsBuilder);
@@ -43,9 +32,9 @@ class VehicleTopologyTest {
     topologyTestDriver = new TopologyTestDriver(streamsBuilder.build());
 
     testInputTopic = topologyTestDriver.createInputTopic("input",
-      Serdes.Long().serializer(), inputSerde.serializer());
+      Serdes.Long().serializer(), serdeConfig.inputSerde().serializer());
     testOutputTopic = topologyTestDriver.createOutputTopic("output",
-      Serdes.Long().deserializer(), outputSerde.deserializer());
+      Serdes.Long().deserializer(), serdeConfig.outputSerde().deserializer());
   }
 
   @AfterEach
